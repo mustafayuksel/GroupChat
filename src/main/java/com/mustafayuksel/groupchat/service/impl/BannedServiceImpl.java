@@ -1,7 +1,5 @@
 package com.mustafayuksel.groupchat.service.impl;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +9,7 @@ import com.mustafayuksel.groupchat.domain.BannedUser;
 import com.mustafayuksel.groupchat.domain.Chat;
 import com.mustafayuksel.groupchat.repository.BannedUserRepository;
 import com.mustafayuksel.groupchat.repository.ChatRepository;
+import com.mustafayuksel.groupchat.repository.PreferenceRepository;
 import com.mustafayuksel.groupchat.service.BannedService;
 import com.mustafayuksel.groupchat.service.MailSenderService;
 
@@ -23,24 +22,22 @@ public class BannedServiceImpl implements BannedService {
 
 	private final BannedUserRepository bannedUserRepository;
 
+	private final PreferenceRepository preferenceRepository;
+
 	@Autowired
 	public BannedServiceImpl(ChatRepository chatRepository, MailSenderService mailSenderService,
-			BannedUserRepository bannedUserRepository) {
+			BannedUserRepository bannedUserRepository, PreferenceRepository preferenceRepository) {
 		this.chatRepository = chatRepository;
 		this.mailSenderService = mailSenderService;
 		this.bannedUserRepository = bannedUserRepository;
+		this.preferenceRepository = preferenceRepository;
 	}
 
 	@Override
 	public void sendCouldBeBannedUserMessageViaEmail(String userId) {
 		List<Chat> chatDetails = chatRepository.findAllByUserId(userId);
-		String bannedUserUrl = "";
-		try {
-			bannedUserUrl = InetAddress.getLocalHost().getHostAddress() + "/chat/banuser?userId=" + userId + "\n";
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-
+		String bannedUserUrl = preferenceRepository.findByMnemonic("HOST_NAME").getName() + "/chat/banuser?userId="
+				+ userId + "\n";
 		String chatMessages = chatDetails.stream().map(c -> c.getMessage().concat("\n")).reduce("", String::concat);
 		mailSenderService.send(bannedUserUrl + chatMessages);
 	}
