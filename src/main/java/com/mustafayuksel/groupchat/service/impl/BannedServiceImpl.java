@@ -10,6 +10,7 @@ import com.mustafayuksel.groupchat.domain.Chat;
 import com.mustafayuksel.groupchat.repository.BannedUserRepository;
 import com.mustafayuksel.groupchat.repository.ChatRepository;
 import com.mustafayuksel.groupchat.repository.PreferenceRepository;
+import com.mustafayuksel.groupchat.response.BaseResponse;
 import com.mustafayuksel.groupchat.service.BannedService;
 import com.mustafayuksel.groupchat.service.MailSenderService;
 
@@ -43,7 +44,13 @@ public class BannedServiceImpl implements BannedService {
 	}
 
 	@Override
-	public void save(BannedUser bannedUser) {
-		bannedUserRepository.save(bannedUser);
+	public BaseResponse save(String userId) {
+		List<BannedUser> bannedUsers = bannedUserRepository.findByUserId(userId);
+		if (bannedUsers.isEmpty()) {
+			BannedUser bannedUser = new BannedUser(userId);
+			bannedUserRepository.save(bannedUser);
+			return new BaseResponse("Inserted Successfully", true);
+		}
+		return new BaseResponse("Already Inserted!", true);
 	}
 }

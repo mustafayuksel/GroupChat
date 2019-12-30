@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mustafayuksel.groupchat.domain.BannedUser;
 import com.mustafayuksel.groupchat.request.CreateChatDetailRequest;
 import com.mustafayuksel.groupchat.response.BaseResponse;
 import com.mustafayuksel.groupchat.response.ListChatDetailsResponse;
@@ -50,8 +49,6 @@ public class ChatRestController {
 
 	@GetMapping(value = "/banuser")
 	public BaseResponse banUser(@RequestParam("userId") String userId) {
-		BannedUser bannedUser = new BannedUser(userId);
-		bannedService.save(bannedUser);
-		return new BaseResponse("", true);
+		return bannedService.save(userId);
 	}
 }
