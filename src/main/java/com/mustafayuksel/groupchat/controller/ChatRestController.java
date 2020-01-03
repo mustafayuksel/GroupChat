@@ -1,6 +1,7 @@
 package com.mustafayuksel.groupchat.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,5 +51,20 @@ public class ChatRestController {
 	@GetMapping(value = "/banuser")
 	public BaseResponse banUser(@RequestParam("userId") String userId) {
 		return bannedService.save(userId);
+	}
+
+	@GetMapping(value = "/all")
+	public ListChatDetailsResponse getAllMessages(@RequestParam("languageCode") String languageCode) {
+		return chatService.getMessages(languageCode);
+	}
+
+	@DeleteMapping(value = "/")
+	public BaseResponse deleteAllMessages(@RequestParam("languageCode") String languageCode) {
+		return chatService.deleteAll(languageCode);
+	}
+
+	@DeleteMapping(value = "/{messageId}")
+	public BaseResponse deleteMessage(@PathVariable("messageId") Integer messageId) {
+		return chatService.delete(messageId);
 	}
 }

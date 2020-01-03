@@ -70,6 +70,6 @@ public class Chat extends BaseEntity {
 	}
 
 	public ChatDTO toDTO() {
-		return new ChatDTO(this.userId, this.message, this.userName, this.messageCreateDate);
+		return new ChatDTO(this.userId, getId(), this.message, this.userName, this.messageCreateDate);
 	}
 }

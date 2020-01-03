@@ -12,7 +12,11 @@ import com.mustafayuksel.groupchat.dto.Status;
 public interface ChatRepository extends CrudRepository<Chat, Integer> {
 	List<Chat> findTop20ByStatusAndLanguageCodeOrderByCreateDateDesc(Status status, String languageCode);
 
+	List<Chat> findAllByLanguageCodeOrderByCreateDateDesc(String languageCode);
+
 	List<Chat> findAllByStatusOrderByCreateDateDesc(Status status);
 
 	List<Chat> findAllByUserId(String userId);
+
+	void deleteAllByStatusAndLanguageCode(Status status, String languageCode);
 }

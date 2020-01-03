@@ -12,6 +12,7 @@ import com.mustafayuksel.groupchat.dto.Status;
 import com.mustafayuksel.groupchat.repository.BannedUserRepository;
 import com.mustafayuksel.groupchat.repository.ChatRepository;
 import com.mustafayuksel.groupchat.request.CreateChatDetailRequest;
+import com.mustafayuksel.groupchat.response.BaseResponse;
 import com.mustafayuksel.groupchat.response.ListChatDetailsResponse;
 import com.mustafayuksel.groupchat.service.ChatService;
 
@@ -35,6 +36,25 @@ public class ChatServiceImpl implements ChatService {
 	}
 
 	@Override
+	public BaseResponse deleteAll(String languageCode) {
+		chatRepository.deleteAllByStatusAndLanguageCode(Status.ACTIVE, languageCode);
+		return new BaseResponse("Deleted Succesfully!", true);
+	}
+
+	@Override
+	public BaseResponse delete(Integer messageId) {
+		chatRepository.deleteById(messageId);
+		return new BaseResponse("Deleted Succesfully!", true);
+	}
+
+	@Override
+	public ListChatDetailsResponse getAllMessages(String languageCode) {
+		return new ListChatDetailsResponse(true, null,
+				chatRepository.findAllByLanguageCodeOrderByCreateDateDesc(languageCode).stream().map(Chat::toDTO)
+						.collect(Collectors.toList()));
+	}
+
+	@Override
 	public ListChatDetailsResponse createMessage(CreateChatDetailRequest createChatDetailRequest) {
 		List<BannedUser> bannedUsers = bannedUserRepository.findByUserId(createChatDetailRequest.getUserId());
 
@@ -48,7 +68,6 @@ public class ChatServiceImpl implements ChatService {
 			List<Chat> allChatDetails = chatRepository.findAllByStatusOrderByCreateDateDesc(Status.ACTIVE);
 
 			if (allChatDetails.size() > 20) {
-				// List<Chat> deletedChatDetails = allChatDetails.subList(0, 1);
 				List<Chat> deletedChatDetails = allChatDetails.subList(20, allChatDetails.size());
 				deletedChatDetails.get(0).setStatus(Status.PASSIVE);
 				chatRepository.save(deletedChatDetails.get(0));
