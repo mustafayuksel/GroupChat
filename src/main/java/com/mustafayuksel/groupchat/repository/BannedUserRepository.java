@@ -10,4 +10,6 @@ import com.mustafayuksel.groupchat.domain.BannedUser;
 @Repository
 public interface BannedUserRepository extends CrudRepository<BannedUser, Integer> {
 	List<BannedUser> findByUserId(String userId);
+
+	void deleteByUserId(String userId);
 }

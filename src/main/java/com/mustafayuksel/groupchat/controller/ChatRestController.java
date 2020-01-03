@@ -67,4 +67,9 @@ public class ChatRestController {
 	public BaseResponse deleteMessage(@PathVariable("messageId") Integer messageId) {
 		return chatService.delete(messageId);
 	}
+
+	@DeleteMapping(value = "banuser/{userId}")
+	public BaseResponse deleteMessage(@PathVariable("userId") String userId) {
+		return bannedService.delete(userId);
+	}
 }

@@ -2,6 +2,8 @@ package com.mustafayuksel.groupchat.service.impl;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,5 +54,12 @@ public class BannedServiceImpl implements BannedService {
 			return new BaseResponse("Inserted Successfully", true);
 		}
 		return new BaseResponse("Already Inserted!", true);
+	}
+
+	@Transactional
+	@Override
+	public BaseResponse delete(String userId) {
+		bannedUserRepository.deleteByUserId(userId);
+		return new BaseResponse("Deleted Successfully!", true);
 	}
 }
