@@ -3,6 +3,8 @@ package com.mustafayuksel.groupchat.service.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +37,7 @@ public class ChatServiceImpl implements ChatService {
 						.stream().map(Chat::toDTO).collect(Collectors.toList()));
 	}
 
+	@Transactional
 	@Override
 	public BaseResponse deleteAll(String languageCode) {
 		chatRepository.deleteAllByStatusAndLanguageCode(Status.ACTIVE, languageCode);
