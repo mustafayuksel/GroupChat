@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,17 +16,21 @@ import com.mustafayuksel.groupchat.response.BaseResponse;
 import com.mustafayuksel.groupchat.response.ListChatDetailsResponse;
 import com.mustafayuksel.groupchat.service.BannedService;
 import com.mustafayuksel.groupchat.service.ChatService;
+import com.mustafayuksel.groupchat.service.PreferenceService;
 
 @RestController
 @RequestMapping("/chat")
 public class ChatRestController {
 	private final ChatService chatService;
 	private final BannedService bannedService;
+	private final PreferenceService preferenceService;
 
 	@Autowired
-	public ChatRestController(ChatService chatService, BannedService bannedService) {
+	public ChatRestController(ChatService chatService, BannedService bannedService,
+			PreferenceService preferenceService) {
 		this.chatService = chatService;
 		this.bannedService = bannedService;
+		this.preferenceService = preferenceService;
 	}
 
 	@GetMapping(value = "/")
@@ -71,5 +76,15 @@ public class ChatRestController {
 	@DeleteMapping(value = "banuser/{userId}")
 	public BaseResponse deleteMessage(@PathVariable("userId") String userId) {
 		return bannedService.delete(userId);
+	}
+
+	@GetMapping(value = "/isopen")
+	public Boolean isChatOpen() {
+		return preferenceService.isChatOpen();
+	}
+
+	@PutMapping(value = "/isopen/{flag}")
+	public BaseResponse updateChatFlag(@PathVariable("flag") String flag) {
+		return preferenceService.updateChatFlag(flag);
 	}
 }
