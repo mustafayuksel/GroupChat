@@ -37,11 +37,12 @@ public class BannedServiceImpl implements BannedService {
 	}
 
 	@Override
-	public void sendCouldBeBannedUserMessageViaEmail(String userId) {
+	public void sendBannedUserMessageViaEmail(String userId) {
 		List<Chat> chatDetails = chatRepository.findAllByUserId(userId);
 		String bannedUserUrl = preferenceRepository.findByMnemonic("HOST_NAME").getName() + "/chat/banuser?userId="
 				+ userId + "\n";
-		String chatMessages = chatDetails.stream().map(c -> c.getMessage().concat("\n")).reduce("", String::concat);
+		String chatMessages = chatDetails.stream().map(c -> c.getId() + " " + c.getMessage().concat("\n")).reduce("",
+				String::concat);
 		mailSenderService.send(bannedUserUrl + chatMessages);
 	}
 

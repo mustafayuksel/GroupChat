@@ -41,7 +41,7 @@ public class ChatRestController {
 	@PostMapping(value = "/complain/{userId}")
 	public BaseResponse complainUser(@PathVariable("userId") String userId) {
 		try {
-			bannedService.sendCouldBeBannedUserMessageViaEmail(userId);
+			bannedService.sendBannedUserMessageViaEmail(userId);
 		} catch (Exception ex) {
 
 		}
