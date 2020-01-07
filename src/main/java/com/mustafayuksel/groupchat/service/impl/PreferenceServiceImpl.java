@@ -29,6 +29,6 @@ public class PreferenceServiceImpl implements PreferenceService {
 		Preference preference = preferenceRepository.findByMnemonic(IS_CHAT_OPEN);
 		preference.setValue("true".equalsIgnoreCase(flag) ? 1 : 0);
 		preferenceRepository.save(preference);
-		return new BaseResponse("Update Successfully!", true);
+		return new BaseResponse("Updated Successfully!", true);
 	}
 }
