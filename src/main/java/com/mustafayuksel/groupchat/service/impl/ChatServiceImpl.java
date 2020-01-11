@@ -68,7 +68,8 @@ public class ChatServiceImpl implements ChatService {
 					createChatDetailRequest.getMessage(), createChatDetailRequest.getUserName(),
 					createChatDetailRequest.getMessageCreateDate()));
 
-			List<Chat> allChatDetails = chatRepository.findAllByStatusOrderByCreateDateDesc(Status.ACTIVE);
+			List<Chat> allChatDetails = chatRepository.findAllByStatusAndLanguageCodeOrderByCreateDateDesc(
+					Status.ACTIVE, createChatDetailRequest.getLanguageCode());
 
 			if (allChatDetails.size() > 20) {
 				List<Chat> deletedChatDetails = allChatDetails.subList(20, allChatDetails.size());

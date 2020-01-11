@@ -14,7 +14,7 @@ public interface ChatRepository extends CrudRepository<Chat, Integer> {
 
 	List<Chat> findAllByLanguageCodeOrderByCreateDateDesc(String languageCode);
 
-	List<Chat> findAllByStatusOrderByCreateDateDesc(Status status);
+	List<Chat> findAllByStatusAndLanguageCodeOrderByCreateDateDesc(Status status, String languageCode);
 
 	List<Chat> findAllByUserId(String userId);
 
